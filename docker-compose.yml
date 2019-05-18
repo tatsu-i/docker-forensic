@@ -1,0 +1,40 @@
+version: '3.4'
+
+volumes:
+  es-data:      # elasticsearch data
+
+services:
+
+  plaso:
+    build: plaso
+    volumes:
+      - ./evidence:/data
+    command: psort /data/evidences.plaso
+
+  logstash:
+    build: logstash
+    volumes:
+      - ./evidence:/data
+    depends_on: [ 'elasticsearch', 'kibana']
+    environment:
+      LOG_LEVEL: error
+      ES_JAVA_OPTS: '-Xms4G -Xmx4G'
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.0.0
+    ports: [ '5601:5601']
+    depends_on: [ 'elasticsearch' ]
+    environment:
+      ELASTICSEARCH_HOST: http://elasticsearch:9200
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.0.0
+    volumes: [ 'es-data:/usr/share/elasticsearch/data' ]
+    environment:
+      discovery.type: 'single-node'
+      bootstrap.memory_lock: 'true'
+      ES_JAVA_OPTS: '-Xms1G -Xmx1G'
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
