@@ -9,7 +9,8 @@ services:
     build: plaso
     volumes:
       - ./evidence:/data
-    command: psort /data/evidences.plaso
+    environment:
+      WORKER_NUM: 2
 
   logstash:
     build: logstash
