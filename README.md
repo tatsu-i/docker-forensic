@@ -1,16 +1,16 @@
+# start kibana
+```bash
+$ docker-compose up -d kibana
+```
+
 # convert image to plaso
 ```bash
 $ docker-compose up plaso
 ```
 
-# store data
-```bash
-$ docker-compose up -d logstash
-```
-
 # import dashboard
 ```
-$ curl -XPOST http://127.0.0.1/api/kibana/dashboards/import -H 'kbn-xsrf:true' -H 'Content-type:application/json' -d @dashboard-plaso.json
+$ curl -XPOST http://127.0.0.1:5601/api/kibana/dashboards/import -H 'kbn-xsrf:true' -H 'Content-type:application/json' -d @dashboard-plaso.json
 ```
 # export dashboard
 ```

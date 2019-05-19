@@ -12,15 +12,6 @@ services:
     environment:
       WORKER_NUM: 2
 
-  logstash:
-    build: logstash
-    volumes:
-      - ./evidence:/data
-    depends_on: [ 'elasticsearch', 'kibana']
-    environment:
-      LOG_LEVEL: error
-      ES_JAVA_OPTS: '-Xms4G -Xmx4G'
-
   kibana:
     image: docker.elastic.co/kibana/kibana:7.0.0
     ports: [ '5601:5601']
